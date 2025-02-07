@@ -1,36 +1,47 @@
-Task:
+Overview
+The Bank Account Management System is a Java application designed to manage bank accounts and transactions using JDBC for database interaction. This system allows users to create accounts, view balances, and transfer funds between accounts while ensuring data integrity through transaction management.
 
-Create a Java application that will interact with the database using JDBC.
-Your task is to implement a bank account management system that supports transactions.
+Features
+Create an Account: Add a new account with an initial balance.
+View Balance: Retrieve the current balance of an account by its account number.
+Transfer Funds: Transfer funds between two accounts with transaction support to ensure data integrity.
+Logging: Log all transactions in a separate table for auditing purposes.
 
-Requirements:
+Implementation Details
+1. Create an Account
+Functionality: Users can create a new account by providing a unique account number and an initial balance.
+Validation: The account number must be unique; otherwise, an error will be raised.
+2. View Balance
+Functionality: Users can view the current balance of an account by entering the account number.
+Output: The application retrieves and displays the balance associated with the provided account number.
+3. Transfer Funds
+Functionality: Users can transfer funds from one account to another.
+Transaction Management: The transfer is executed within a transaction to ensure that:
+Both accounts exist.
+The sender has sufficient funds for the transfer.
+Rollback Mechanism: If any validation fails, the transaction is rolled back to maintain data integrity.
+4. Exception Handling
+Insufficient Funds: If the sender does not have enough funds, an exception is thrown, and the transaction is rolled back.
+Logging Errors: Any errors encountered during the transfer process are logged for auditing purposes.
+5. Logging Operations
+All transfer operations are logged in the transactions table, which includes:
 
-1. Configuring the database ->
-Create an accounts table with the fields:
-id (PRIMARY KEY, BIGSERIAL)
-account_number (VARCHAR)
-balance (DECIMAL)
+transaction_id: Unique identifier for the transaction.
+from_account: The account number from which funds are transferred.
+to_account: The account number to which funds are transferred.
+amount: The amount transferred.
+timestamp: The time when the transaction occurred.
+Usage Instructions
+Set Up the Database:
 
-2. Create an account ->
-A method for adding a new account with an initial balance.
-Balance View ->
-A method to get the current balance by account number.
-Transfer of funds ->
-A method for transferring funds from one account to another.
-This method must be implemented as a transaction to ensure data integrity.
+Create the accounts and transactions tables in your PostgreSQL database using the provided SQL scripts.
+Configure Database Connection:
 
-3. Implement the transfer of funds between two accounts as a transaction.
-If the transfer cannot be completed (for example, there are insufficient funds),
-the transaction must be rolled back.
+Update the database connection settings in the application configuration file to match your database credentials.
+Run the Application:
 
-4. Handle possible exceptions, such as insufficient funds for the transfer,
-and ensure that the transaction is rolled back in case of an error.
+Start the application and interact with the menu to create accounts, view balances, and transfer funds.
+Conclusion
+The Bank Account Management System provides a comprehensive solution for managing bank accounts and transactions. With robust transaction management and detailed logging, this application ensures data integrity and offers a user-friendly experience for managing financial operations.
 
-5. Implement logging of operations in a separate transactions table,
-where information about each transfer will be stored ->
-
-transaction_id,
-from_account,
-to_account,
-amount,
-timestamp.
+Feel free to explore the code and customize it further to meet your specific requirements!
