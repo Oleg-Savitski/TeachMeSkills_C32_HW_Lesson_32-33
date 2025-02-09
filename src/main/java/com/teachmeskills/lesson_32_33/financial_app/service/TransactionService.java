@@ -1,5 +1,6 @@
 package com.teachmeskills.lesson_32_33.financial_app.service;
 
+import com.teachmeskills.lesson_32_33.financial_app.exception.TransactionException;
 import com.teachmeskills.lesson_32_33.financial_app.model.Transaction;
 import com.teachmeskills.lesson_32_33.financial_app.util.DatabaseConfig;
 
@@ -12,12 +13,12 @@ import static com.teachmeskills.lesson_32_33.financial_app.util.Constants.TRANSA
 public class TransactionService {
     private static final Logger logger = Logger.getLogger(TransactionService.class.getName());
 
-    public void Transaction(Transaction transaction) {
-
+    public void recordTransaction(Transaction transaction) throws TransactionException {
         try (Connection conn = DriverManager.getConnection(DatabaseConfig.getInstance().getUrl(),
                 DatabaseConfig.getInstance().getUser (),
                 DatabaseConfig.getInstance().getPassword());
              PreparedStatement preparedStatement = conn.prepareStatement(TRANSACTIONS, Statement.RETURN_GENERATED_KEYS)) {
+
             preparedStatement.setString(1, transaction.getAccountNumber());
             preparedStatement.setTimestamp(2, Timestamp.valueOf(transaction.getTransactionTime()));
             preparedStatement.setString(3, transaction.getTransactionType());
@@ -33,8 +34,8 @@ public class TransactionService {
             logger.info("The transaction was recorded successfully -> " + transaction.getTransactionId());
 
         } catch (SQLException e) {
-
             logger.log(Level.SEVERE, "Error when recording a transaction -> " + e.getMessage(), e);
+            throw new TransactionException("Failed to record transaction", e);
         }
     }
 }

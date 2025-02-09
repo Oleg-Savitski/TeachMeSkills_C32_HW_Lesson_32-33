@@ -1,6 +1,7 @@
 package com.teachmeskills.lesson_32_33.financial_app.service;
 
 import com.teachmeskills.lesson_32_33.financial_app.exception.AccountValidationException;
+import com.teachmeskills.lesson_32_33.financial_app.exception.TransactionException;
 import com.teachmeskills.lesson_32_33.financial_app.manager.impl.LogManager;
 import com.teachmeskills.lesson_32_33.financial_app.model.Account;
 import com.teachmeskills.lesson_32_33.financial_app.model.Transaction;
@@ -97,7 +98,7 @@ public class AccountService {
                 }
             }
 
-            transactionService.Transaction(transaction);
+            transactionService.recordTransaction(transaction);
 
             logTransaction.setTransactionId(transaction.getTransactionId());
             logTransaction.setLogMessage("Transfer " + amount + " from " + fromAccount + " to " + toAccount);
@@ -116,6 +117,8 @@ public class AccountService {
         } catch (IllegalArgumentException e) {
             logger.warning("Error: " + e.getMessage());
             throw e;
+        } catch (TransactionException e) {
+            throw new RuntimeException(e);
         }
     }
 }
